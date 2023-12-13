@@ -1,19 +1,62 @@
-import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
-import { StyledEngineProvider, ThemeProvider, Box } from "@mui/material";
-import { theme } from "./src/utils/theme";
-import { GlobalStyles } from "./src/GlobalStyle";
-import Home from "./src/containers/Home";
+/** @jsxRuntime classic /
+/* @jsx jsx */
+/** @jsxImportSource @emotion/react */
+import { Markdown } from "tiptap-markdown";
+import { Editor as NovelEditor } from "novel";
+
+const classes = {
+  editor: {
+    "& .ProseMirror": {
+      padding: 12
+    },
+    "& .mention": {
+      backgroundColor: "grey",
+      paddingLeft: 6,
+      paddingRight: 6,
+      paddingBottom: 3,
+      borderRadius: 12,
+      fontWeight: 300,
+      color: "#000",
+      fontSize: 12,
+      textDecoration: "none"
+    },
+    " & .collaboration-cursor-name-label": {
+      maxWidth: 200,
+      borderRadius: 2,
+      padding: "4px 5px",
+      fontFamily: "Product Sans Regular",
+      fontWeight: 300
+    },
+    // remove drag and drop
+    "& .drag-handle": {
+      display: "none"
+    },
+    "& h1": { fontSize: 32 },
+    "& h2": { fontSize: 22 },
+    "& h3": { fontSize: 14 },
+    "& h4": { fontSize: 14 },
+    "& h5": { fontSize: 12 },
+    "& h6": { fontSize: 10 }
+  }
+};
 
 const App = () => {
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <EmotionThemeProvider theme={theme}>
-          <GlobalStyles theme={theme} />
-          <Home />
-        </EmotionThemeProvider>
-      </ThemeProvider>
-    </StyledEngineProvider>
+    <NovelEditor
+      css={classes.editor}
+      defaultValue="<h1>Hello</h1>"
+      editorProps={{
+        editable: () => false
+      }}
+      disableLocalStorage
+      extensions={[
+        Markdown.configure({
+          html: false,
+          transformCopiedText: true,
+          transformPastedText: true
+        })
+      ]}
+    />
   );
 };
 
